@@ -160,12 +160,14 @@ export default function ContactUsPage() {
             />
           </div>
 
-          <button
-            type="submit"
-            className="h-10 md:h-11 bg-blue-600 hover:bg-blue-700 text-white md:text-base text-sm font-normal md:px-5 px-4 rounded-3xl transition-colors cursor-pointer"
-          >
-            Send Message
-          </button>
+          <div className="flex justify-center">
+            <button
+              type="submit"
+              className="h-10  md:w-1/4 w-full md:h-11 bg-blue-600 hover:bg-blue-700 text-white md:text-base text-sm font-normal md:px-5 px-4 rounded-3xl transition-colors cursor-pointer"
+            >
+              Send Message
+            </button>
+          </div>
 
           {/* <button type="submit" className={styles.submitButton}>
             Send Message

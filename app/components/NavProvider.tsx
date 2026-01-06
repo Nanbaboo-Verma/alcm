@@ -5,15 +5,15 @@ import React, { createContext, useContext, useState } from "react";
 type NavItem = { label: string; href: string };
 
 const NAV_ITEMS: NavItem[] = [
-  { label: "Dashboard", href: "/" },
+  { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Contact us", href: "/contact-us" },
   { label: "Admission", href: "/admission" },
   { label: "Result", href: "/result" },
   { label: "Game", href: "/game" },
-  { label: "Guist", href: "guist/" },
+  { label: "Guest", href: "/guest" },
   { label: "Calendar", href: "/calendar" },
-  { label: "Enquary", href: "/enquary" },
+  { label: "Career", href: "/career" },
 ];
 
 type NavContextValue = {

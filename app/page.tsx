@@ -1,12 +1,14 @@
 import Image from "next/image";
 import Banner from "./home/banner/page";
 import LookingFor from "./home/LookingFor/page";
+import Student from "./home/student/student";
 
 export default function Home() {
   return (
     <div>
       <Banner />
       <LookingFor />
+      <Student />
       <div className="max-w-7xl mx-auto p-5">
         <Image
           className="dark:invert"

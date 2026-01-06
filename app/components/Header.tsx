@@ -71,7 +71,6 @@ export default function Header() {
                 </div>
 
                 <div className="flex gap-4 align-items-center" style={{ alignItems: "center" }}>
-                    <div className="md:block hidden">ALCM</div>
                     <button className="py-2 px-4 rounded-lg text-sm text-white bg-blue-600 hover:bg-blue-700 cursor-pointer">
                         Admission
                     </button>
