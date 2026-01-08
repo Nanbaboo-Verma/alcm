@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import styles from "./contact.module.css";
+import Toast from "../components/Toast";
+import Modal from "../components/Modal";
 
 export default function ContactUsPage() {
   const [formData, setFormData] = useState({
@@ -112,6 +114,9 @@ export default function ContactUsPage() {
             ✓ Thank you for your message! We'll get back to you soon.
           </div>
         )}
+        <Toast isOpen={submitted} type="success" position="top-center" message="Thank you for your message! We'll get back to you soon" />
+        <Toast isOpen={error===""?false:true} type="error" position="top-center" message={error} customClass={styles.errorMessage} />
+        <Modal isOpen={submitted} onClose={() => setSubmitted(false)}>Thank you for your message! We'll get back to you soon</Modal>
 
         {error && <div className={styles.errorMessage}>✗ {error}</div>}
 

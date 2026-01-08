@@ -1,7 +1,8 @@
+import { NextRequest, NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Contact from "@/models/contact";
 
-export async function POST(req) {
+export async function POST(req: NextRequest) {
   try {
     await connectDB();
     console.log("Database connected successfully");
@@ -11,7 +12,7 @@ export async function POST(req) {
 
     // Validate required fields
     if (!body.firstName || !body.lastName || !body.phoneNumber || !body.message) {
-      return Response.json(
+      return NextResponse.json(
         { success: false, message: "All fields are required" },
         { status: 400 }
       );
@@ -26,14 +27,15 @@ export async function POST(req) {
 
     console.log("Contact saved:", contact);
 
-    return Response.json(
+    return NextResponse.json(
       { success: true, message: "Contact form submitted successfully", contact },
       { status: 201 }
     );
   } catch (error) {
     console.error("Error saving contact:", error);
-    return Response.json(
-      { success: false, message: error.message },
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json(
+      { success: false, message: errorMessage },
       { status: 500 }
     );
   }
