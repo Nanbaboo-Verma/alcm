@@ -13,6 +13,7 @@ export default function ContactUsPage() {
 
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -56,9 +57,24 @@ export default function ContactUsPage() {
       return;
     }
 
+    setLoading(true);
+
     try {
-      // Here you can add your API call to handle the form submission
-      console.log("Form submitted:", formData);
+      const response = await fetch("/api/contact-us", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.message || "Failed to submit form. Please try again.");
+        setLoading(false);
+        return;
+      }
 
       setSubmitted(true);
       setFormData({
@@ -74,6 +90,8 @@ export default function ContactUsPage() {
       }, 5000);
     } catch (err) {
       setError("Failed to submit form. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -163,9 +181,10 @@ export default function ContactUsPage() {
           <div className="flex justify-center">
             <button
               type="submit"
-              className="h-10  md:w-1/4 w-full md:h-11 bg-blue-600 hover:bg-blue-700 text-white md:text-base text-sm font-normal md:px-5 px-4 rounded-3xl transition-colors cursor-pointer"
+              disabled={loading}
+              className="h-10  md:w-1/4 w-full md:h-11 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white md:text-base text-sm font-normal md:px-5 px-4 rounded-3xl transition-colors cursor-pointer"
             >
-              Send Message
+              {loading ? "Sending..." : "Send Message"}
             </button>
           </div>
 
