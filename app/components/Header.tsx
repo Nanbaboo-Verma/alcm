@@ -4,11 +4,16 @@ import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useNav } from "./NavProvider";
+import { ArrowLeft, BookOpen, Menu, Settings, Shield, User, Users } from "react-feather";
+import Popover from "./Popover";
 
 export default function Header() {
     const { navItems, toggle } = useNav();
     const pathname = usePathname();
     const [showTop, setShowTop] = useState(false);
+    const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+    const [trigger, setTrigger] = useState<HTMLElement | null>(null);
+
     const lastY = useRef(0);
 
     useEffect(() => {
@@ -74,13 +79,17 @@ export default function Header() {
                     <button className="py-2 px-4 rounded-lg text-sm text-white bg-blue-600 hover:bg-blue-700 cursor-pointer">
                         Admission
                     </button>
-                    <button className="py-2 px-4 rounded-lg text-sm bg-amber-200 hover:bg-amber-300 cursor-pointer">
+                    <button
+                        ref={setTrigger}
+                        onClick={() => setIsPopoverOpen(!isPopoverOpen)}
+                        className="hidden md:block py-2 px-4 rounded-lg text-sm bg-amber-200 hover:bg-amber-300 cursor-pointer">
                         Sign In
                     </button>
 
-                    <button aria-label="Toggle menu" onClick={toggle} className="sm:hidden">
-                        ☰
+                    <button aria-label="Toggle menu" onClick={toggle} className="md:hidden border cursor-pointer p-1 rounded">
+                        <Menu />
                     </button>
+
                 </div>
             </div>
 
@@ -94,9 +103,8 @@ export default function Header() {
                                 <Link
                                     key={item.href}
                                     href={item.href}
-                                    className={`px-4 py-1.5 hover:underline text-[#f1f1f1] ${
-                                        isActive ? "bg-black" : "hover:bg-black"
-                                    } hover:text-white`}
+                                    className={`px-4 py-1.5 hover:underline text-[#f1f1f1] ${isActive ? "bg-black" : "hover:bg-black"
+                                        } hover:text-white`}
                                 >
                                     {item.label}
                                 </Link>
@@ -105,6 +113,48 @@ export default function Header() {
                     </nav>
                 </div>
             </div>
+
+            <Popover
+                isOpen={isPopoverOpen}
+                onClose={() => setIsPopoverOpen(false)}
+                triggerElement={trigger}
+                direction="left"
+                popoverWidth={300}
+                customClass="bg-blue-50"
+            >
+                <nav className="space-y-1" aria-label="Account menu">
+                     {/* Admin */}
+                    <a
+                        href="#settings"
+                        className="group flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+                    >
+                        <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 text-slate-600 group-hover:bg-slate-200">
+                            <Shield className="h-5 w-5" />
+                        </span>
+                        <span>Admin</span>
+                    </a>
+                     {/* Teacher */}
+                    <a
+                        href="#settings"
+                        className="group flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+                    >
+                        <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 text-slate-600 group-hover:bg-slate-200">
+                            <BookOpen className="h-5 w-5" />
+                        </span>
+                        <span>Teacher</span>
+                    </a>
+                     {/* Student */}
+                    <a
+                        href="#settings"
+                        className="group flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+                    >
+                        <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 text-slate-600 group-hover:bg-slate-200">
+                            <Users className="h-5 w-5" />
+                        </span>
+                        <span>Student</span>
+                    </a>
+                </nav>
+            </Popover>
         </header>
     );
 }
