@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useNav } from "./NavProvider";
 import { ArrowLeft, BookOpen, Menu, Settings, Shield, User, Users } from "react-feather";
 import Popover from "./Popover";
+import { useTheme } from "next-themes";
 
 export default function Header() {
     const { navItems, toggle } = useNav();
@@ -13,6 +14,7 @@ export default function Header() {
     const [showTop, setShowTop] = useState(false);
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
     const [trigger, setTrigger] = useState<HTMLElement | null>(null);
+    const { theme, setTheme } = useTheme();
 
     const lastY = useRef(0);
 
@@ -71,19 +73,20 @@ export default function Header() {
             {/* header content section */}
             <div className="mx-auto max-w-7xl h-16 px-4 md:px-5 py-3 flex items-center justify-between">
                 <div className="text-center">
-                    <div className="text-lg font-semibold">ALCM</div>
-                    <div className="text-sm">Public School</div>
+                    <div className="text-lg font-semibold">NeoSOFT</div>
+                    <div className="text-sm">Demo Project</div>
                 </div>
 
                 <div className="flex gap-4 align-items-center" style={{ alignItems: "center" }}>
                     <button className="py-2 px-4 rounded-lg text-sm text-white bg-blue-600 hover:bg-blue-700 cursor-pointer">
                         Admission
                     </button>
+
                     <button
                         ref={setTrigger}
                         onClick={() => setIsPopoverOpen(!isPopoverOpen)}
-                        className="hidden md:block py-2 px-4 rounded-lg text-sm bg-amber-200 hover:bg-amber-300 cursor-pointer">
-                        Sign In
+                        className="text-white bg-blue-500 rounded-full p-2 hover:bg-blue-600 cursor-pointer">
+                        <User />
                     </button>
 
                     <button aria-label="Toggle menu" onClick={toggle} className="md:hidden border cursor-pointer p-1 rounded">
@@ -119,41 +122,74 @@ export default function Header() {
                 onClose={() => setIsPopoverOpen(false)}
                 triggerElement={trigger}
                 direction="left"
-                popoverWidth={300}
+                popoverWidth={250}
                 customClass="bg-blue-50"
             >
-                <nav className="space-y-1" aria-label="Account menu">
-                     {/* Admin */}
+                <div className="space-y-1 p-2">
+                    <Link href="/auth/login">
+                    <button
+                        className="flex items-center gap-3 w-full cursor-pointer rounded-lg px-4 py-3 
+                    text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-500">
+                        <Shield className="h-5 w-5" />
+                        <span>Login</span>
+                    </button>
+                    </Link>
+
+                     <button
+                        className="flex items-center gap-3 w-full cursor-pointer rounded-lg px-4 py-3 
+                    text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-500">
+                        <Shield className="h-5 w-5" />
+                        <span>Admin</span>
+                    </button>
+                </div>
+                <nav className="space-y-1 p-2" aria-label="Account menu">
+
+                    {/* Admin */}
                     <a
                         href="#settings"
-                        className="group flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+                        className="group flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-slate-900"
                     >
-                        <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 text-slate-600 group-hover:bg-slate-200">
+                        <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg">
                             <Shield className="h-5 w-5" />
                         </span>
                         <span>Admin</span>
                     </a>
-                     {/* Teacher */}
+                    <button
+                        className="flex items-center gap-3 w-full cursor-pointer rounded-lg px-4 py-3 
+                    text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-slate-900">
+                        <Shield className="h-5 w-5" />
+                        <span>Admin</span>
+                    </button>
+
+                    {/* Teacher */}
                     <a
                         href="#settings"
                         className="group flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-slate-900"
                     >
-                        <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 text-slate-600 group-hover:bg-slate-200">
+                        <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg">
                             <BookOpen className="h-5 w-5" />
                         </span>
                         <span>Teacher</span>
                     </a>
-                     {/* Student */}
+                    {/* Student */}
                     <a
                         href="#settings"
                         className="group flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-slate-900"
                     >
-                        <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 text-slate-600 group-hover:bg-slate-200">
+                        <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg">
                             <Users className="h-5 w-5" />
                         </span>
                         <span>Student</span>
                     </a>
                 </nav>
+
+                <hr className="my-2 border-slate-200" />
+
+                <div className="space-y-1 p-2">
+                    <button className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-slate-900 cursor-pointer" onClick={() => setTheme("light")}>Light🌞</button>
+                    <button className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-slate-900 cursor-pointer" onClick={() => setTheme("dark")}>Dark🌙</button>
+                    <button className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-slate-900 cursor-pointer" onClick={() => setTheme("system")}>System💻</button>
+                </div>
             </Popover>
         </header>
     );

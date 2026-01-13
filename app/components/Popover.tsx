@@ -114,7 +114,7 @@ const Popover: React.FC<PopoverProps> = ({
   return createPortal(
     <div
       ref={popoverRef}
-      className={`fixed z-50 rounded-xl border border-slate-200 bg-white p-2 shadow-sm ${customClass}`}
+      className={`fixed z-50 rounded-xl border border-slate-200 bg-white shadow-sm ${customClass}`}
       style={{
         top: `${position.top}px`,
         left: `${position.left}px`,
