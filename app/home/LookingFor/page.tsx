@@ -3,7 +3,7 @@ import React from "react";
 const LookingFor: React.FC = () => {
   return (
     <section className="bg-gray-50 py-20">
-      <div className="container mx-auto px-4">
+      <div className="max-w-7xl mx-auto px-4">
         
         {/* Heading */}
         <div className="mb-14 text-center">
