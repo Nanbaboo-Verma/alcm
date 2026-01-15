@@ -11,41 +11,65 @@ import { useTheme } from "next-themes";
 export default function Header() {
     const { navItems, toggle } = useNav();
     const pathname = usePathname();
+    const [showTop, setShowTop] = useState(false);
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
     const [trigger, setTrigger] = useState<HTMLElement | null>(null);
     const { theme, setTheme } = useTheme();
-    const [showTop, setShowTop] = useState(false);
+
     const lastY = useRef(0);
 
     useEffect(() => {
-        const onScroll = () => {
-            const currentY = window.scrollY;
+        // initialize lastY and showTop
+        lastY.current = window.scrollY;
 
-            // Detect direction
-            if (currentY > lastY.current && currentY >= 64) {
-                // 🔽 Scrolling DOWN
-                setShowTop(false);
-                console.log("DOWN");
-            } else if (currentY < lastY.current) {
-                // 🔼 Scrolling UP
+        const onScroll = () => {
+            // on wider screens keep header visible
+            if (window.innerWidth >= 768) {
                 setShowTop(true);
-                console.log("UP");
+                lastY.current = window.scrollY;
+                return;
             }
 
-            lastY.current = currentY;
+            const y = window.scrollY;
+            const delta = lastY.current - y; // positive when scrolling up
+
+            if (y <= 50) {
+                setShowTop(true);
+            } else if (delta > 50) {
+                setShowTop(true);
+            } else if (delta < -10) {
+                setShowTop(false);
+            }
+
+            lastY.current = y;
+        };
+
+        const onResize = () => {
+            if (window.innerWidth >= 768) {
+                setShowTop(true);
+            } else {
+                // recalc based on current scroll position
+                onScroll();
+            }
         };
 
         window.addEventListener("scroll", onScroll, { passive: true });
+        window.addEventListener("resize", onResize);
+        // run once to set initial state
+        onResize();
 
         return () => {
             window.removeEventListener("scroll", onScroll);
+            window.removeEventListener("resize", onResize);
         };
     }, []);
 
-
     return (
         <header
-            className={`left-0 right-0 z-50 w-full bg-[#f3f0e8] transition-transform duration-300 ${showTop ? 'fixed' : ''}`}>
+            // toggle top between hidden (-top-16) and visible (top-0)
+            className={`sticky left-0 right-0 z-50 w-full bg-[#f3f0e8] ${showTop ? "top-0" : "-top-16"}`}
+            style={{ transition: "top 280ms ease" }}
+        >
             {/* header content section */}
             <div className="mx-auto max-w-7xl h-16 px-4 md:px-5 py-3 flex items-center justify-between">
                 <div className="text-center">
@@ -73,7 +97,7 @@ export default function Header() {
             </div>
 
             {/* header nav section */}
-            <div className={`bg-[#282A35] md:block hidden z-40 ${showTop ? '' : 'fixed top-0 w-full'}`}>
+            <div className="bg-[#282A35] md:block hidden">
                 <div className="mx-auto max-w-7xl px-4 md:px-5 flex items-center justify-between">
                     <nav className="sm:flex text-[15px]">
                         {navItems.map((item) => {
@@ -92,6 +116,7 @@ export default function Header() {
                     </nav>
                 </div>
             </div>
+
             <Popover
                 isOpen={isPopoverOpen}
                 onClose={() => setIsPopoverOpen(false)}
@@ -102,15 +127,15 @@ export default function Header() {
             >
                 <div className="space-y-1 p-2">
                     <Link href="/auth/login">
-                        <button
-                            className="flex items-center gap-3 w-full cursor-pointer rounded-lg px-4 py-3 
+                    <button
+                        className="flex items-center gap-3 w-full cursor-pointer rounded-lg px-4 py-3 
                     text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-500">
-                            <Shield className="h-5 w-5" />
-                            <span>Login</span>
-                        </button>
+                        <Shield className="h-5 w-5" />
+                        <span>Login</span>
+                    </button>
                     </Link>
 
-                    <button
+                     <button
                         className="flex items-center gap-3 w-full cursor-pointer rounded-lg px-4 py-3 
                     text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-500">
                         <Shield className="h-5 w-5" />
