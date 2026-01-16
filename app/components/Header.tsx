@@ -16,6 +16,18 @@ export default function Header() {
     const { theme, setTheme } = useTheme();
     const [showTop, setShowTop] = useState(false);
     const lastY = useRef(0);
+    const [userProfile, setUserProfile] = useState('');
+
+   useEffect(() => {
+  const loginData = localStorage.getItem("login");
+
+  if (loginData) {
+    const { email } = JSON.parse(loginData);
+    const initials = email.slice(0, 2).toUpperCase();
+    setUserProfile(initials);
+  }
+}, []);
+
 
     useEffect(() => {
         const onScroll = () => {
@@ -61,8 +73,8 @@ export default function Header() {
                     <button
                         ref={setTrigger}
                         onClick={() => setIsPopoverOpen(!isPopoverOpen)}
-                        className="text-white bg-blue-500 rounded-full p-2 hover:bg-blue-600 cursor-pointer">
-                        <User />
+                        className="h-10 w-10 flex align-items-center justify-center text-white text-2xl bg-blue-500 rounded-full hover:bg-blue-600 cursor-pointer">
+                        {userProfile === ' ' ? <User /> : userProfile}
                     </button>
 
                     <button aria-label="Toggle menu" onClick={toggle} className="md:hidden border cursor-pointer p-1 rounded">
@@ -110,17 +122,17 @@ export default function Header() {
                         </button>
                     </Link>
 
-                    <button
+                    {/* <button
                         className="flex items-center gap-3 w-full cursor-pointer rounded-lg px-4 py-3 
                     text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-500">
                         <Shield className="h-5 w-5" />
                         <span>Admin</span>
-                    </button>
+                    </button> */}
                 </div>
-                <nav className="space-y-1 p-2" aria-label="Account menu">
+                {/* <nav className="space-y-1 p-2" aria-label="Account menu"> */}
 
-                    {/* Admin */}
-                    <a
+                {/* Admin */}
+                {/* <a
                         href="#settings"
                         className="group flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-slate-900"
                     >
@@ -134,10 +146,10 @@ export default function Header() {
                     text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-slate-900">
                         <Shield className="h-5 w-5" />
                         <span>Admin</span>
-                    </button>
+                    </button> */}
 
-                    {/* Teacher */}
-                    <a
+                {/* Teacher */}
+                {/* <a
                         href="#settings"
                         className="group flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-slate-900"
                     >
@@ -145,9 +157,9 @@ export default function Header() {
                             <BookOpen className="h-5 w-5" />
                         </span>
                         <span>Teacher</span>
-                    </a>
-                    {/* Student */}
-                    <a
+                    </a> */}
+                {/* Student */}
+                {/* <a
                         href="#settings"
                         className="group flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-slate-900"
                     >
@@ -156,14 +168,20 @@ export default function Header() {
                         </span>
                         <span>Student</span>
                     </a>
-                </nav>
+                </nav> */}
 
                 <hr className="my-2 border-slate-200" />
 
                 <div className="space-y-1 p-2">
-                    <button className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-slate-900 cursor-pointer" onClick={() => setTheme("light")}>Light🌞</button>
-                    <button className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-slate-900 cursor-pointer" onClick={() => setTheme("dark")}>Dark🌙</button>
-                    <button className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-slate-900 cursor-pointer" onClick={() => setTheme("system")}>System💻</button>
+                    <button
+                        className="flex items-center w-full gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-500 cursor-pointer"
+                        onClick={() => setTheme("light")}>🌞 Light</button>
+                    <button
+                        className="flex items-center w-full gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-500 cursor-pointer"
+                        onClick={() => setTheme("dark")}>🌙 Dark</button>
+                    <button
+                        className="flex items-center w-full gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-500 cursor-pointer"
+                        onClick={() => setTheme("system")}>💻 System</button>
                 </div>
             </Popover>
         </header>
