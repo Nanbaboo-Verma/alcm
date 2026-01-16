@@ -54,9 +54,9 @@ export default function Header() {
                 </div>
 
                 <div className="flex gap-4 align-items-center" style={{ alignItems: "center" }}>
-                    <button className="py-2 px-4 rounded-lg text-sm text-white bg-blue-600 hover:bg-blue-700 cursor-pointer">
+                    {/* <button className="py-2 px-4 rounded-lg text-sm text-white bg-blue-600 hover:bg-blue-700 cursor-pointer">
                         Admission
-                    </button>
+                    </button> */}
 
                     <button
                         ref={setTrigger}

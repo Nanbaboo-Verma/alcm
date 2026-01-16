@@ -14,6 +14,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Guest", href: "/guest" },
   { label: "Calendar", href: "/calendar" },
   { label: "Career", href: "/career" },
+  { label: "Gallery", href: "/gallery" },
 ];
 
 type NavContextValue = {
