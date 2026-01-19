@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useNav } from "./NavProvider";
-import { ArrowLeft, BookOpen, Menu, Settings, Shield, User, Users } from "react-feather";
+import { ArrowLeft, BookOpen, LogIn, LogOut, Menu, Settings, Shield, User, Users } from "react-feather";
 import Popover from "./Popover";
 import { useTheme } from "next-themes";
 
@@ -17,16 +17,64 @@ export default function Header() {
     const [showTop, setShowTop] = useState(false);
     const lastY = useRef(0);
     const [userProfile, setUserProfile] = useState('');
+    const [admin, setAdmin] = useState(false);
+    const [mounted, setMounted] = useState(false);
+    // const [userDetails,setUserDetails] = useState({})
+    // const [userDetails, setUserDetails] = useState(() => {
+    //     if (typeof window !== "undefined") {
+    //         const data = localStorage.getItem("user");
+    //         return data ? JSON.parse(data) : null;
+    //     }
+    //     return null;
+    // });
+
+
+    // useEffect(() => {
+    //     const loginData = localStorage.getItem("user");
+
+    //     if (loginData) {
+    //         const { email } = JSON.parse(loginData);
+    //         const initials = email.slice(0, 2).toUpperCase();
+    //         const isAdmin = JSON.parse(loginData).admin;
+    //         setUserProfile(initials);
+    //         setAdmin(isAdmin);
+    //        setUserDetails(email)
+    //     }
+
+    // }, []);
+
+    // useLayoutEffect(() => {
+    //     const loginData = localStorage.getItem("user");
+
+    //     if (loginData) {
+    //         const user = JSON.parse(loginData);
+
+    //         const initials = user.email.slice(0, 2).toUpperCase();
+
+    //         setUserProfile(initials);
+    //         setAdmin(user.admin);
+    //         setUserDetails(user.email);
+    //     }
+    // }, []);
 
     useEffect(() => {
-        const loginData = localStorage.getItem("login");
+        setMounted(true);
+
+        const loginData = localStorage.getItem("user");
 
         if (loginData) {
-            const { email } = JSON.parse(loginData);
-            const initials = email.slice(0, 2).toUpperCase();
-            setUserProfile(initials);
+            const user = JSON.parse(loginData);
+
+            // setUserDetails(user);
+            setAdmin(user.admin);
+            setUserProfile(user.email.slice(0, 2).toUpperCase());
         }
     }, []);
+
+
+
+
+
 
 
     useEffect(() => {
@@ -37,11 +85,11 @@ export default function Header() {
             if (currentY > lastY.current && currentY >= 64) {
                 // 🔽 Scrolling DOWN
                 setShowTop(false);
-                console.log("DOWN");
+                // console.log("DOWN");
             } else if (currentY < lastY.current) {
                 // 🔼 Scrolling UP
                 setShowTop(true);
-                console.log("UP");
+                // console.log("UP");
             }
 
             lastY.current = currentY;
@@ -54,10 +102,22 @@ export default function Header() {
         };
     }, []);
 
+    // 
+    // console.log(userDetails, admin, 'userProfile')
+    // const isAuthenticated = admin && Object.keys(userDetails).length > 0 ? true : false\
+    const isAuthenticated = Boolean(userProfile && admin);
 
-    return (
+    console.log(isAuthenticated, 'isAuth')
+
+    const handleLogOut = () => {
+        localStorage.removeItem('user');
+    }
+
+
+    return (<>
         <header
-            className={`left-0 right-0 z-50 w-full bg-[#f3f0e8] transition-transform duration-300 ${showTop ? 'fixed' : ''}`}>
+            className={`w-full bg-[#f3f0e8] transition-transform duration-300`}
+        >
             {/* header content section */}
             <div className="mx-auto max-w-7xl h-16 px-4 md:px-5 py-3 flex items-center justify-between">
                 <div className="text-center">
@@ -81,60 +141,99 @@ export default function Header() {
                         aria-label="Toggle menu"
                         onClick={toggle}
                         className="flex items-center justify-center h-9 w-9 md:hidden border border-blue-500 cursor-pointer rounded">
-                        <Menu color="blue"/>
+                        <Menu color="blue" />
                     </button>
                 </div>
             </div>
+        </header>
 
-            {/* header nav section */}
-            <div className={`bg-[#282A35] md:block hidden z-40 ${showTop ? '' : 'fixed top-0 w-full'}`}>
-                <div className="mx-auto max-w-7xl px-4 md:px-5 flex items-center justify-between">
-                    <nav className="sm:flex text-[15px]">
-                        {navItems.map((item) => {
-                            const isActive = pathname === item.href;
-                            return (
-                                <Link
-                                    key={item.href}
-                                    href={item.href}
-                                    className={`px-4 py-1.5 hover:underline text-[#f1f1f1] ${isActive ? "bg-black" : "hover:bg-black"
-                                        } hover:text-white`}
-                                >
-                                    {item.label}
-                                </Link>
-                            );
-                        })}
-                    </nav>
-                </div>
+        {/* header nav section */}
+        <div className={`bg-[#282A35] md:block hidden sticky top-0 z-50`}>
+            <div className="mx-auto max-w-7xl px-4 md:px-5 flex items-center justify-between">
+                <nav className="sm:flex text-[15px]">
+                    {navItems.map((item) => {
+                        const isActive = pathname === item.href;
+                        return (
+                            <Link
+                                key={item.href}
+                                href={item.href}
+                                className={`px-4 py-1.5 hover:underline text-[#f1f1f1] ${isActive ? "bg-black" : "hover:bg-black"
+                                    } hover:text-white`}
+                            >
+                                {item.label}
+
+                            </Link>
+                        );
+                    })}
+
+                </nav>
             </div>
-            <Popover
-                isOpen={isPopoverOpen}
-                onClose={() => setIsPopoverOpen(false)}
-                triggerElement={trigger}
-                direction="left"
-                popoverWidth={250}
-                customClass="bg-blue-50"
-            >
-                <div className="space-y-1 p-2">
-                    <Link href="/auth/login">
+        </div>
+
+        <Popover
+            isOpen={isPopoverOpen}
+            onClose={() => setIsPopoverOpen(false)}
+            triggerElement={trigger}
+            direction="left"
+            popoverWidth={250}
+            customClass="bg-blue-50"
+        >
+            <div className="space-y-1 p-2">
+
+                {isAuthenticated
+                    ? (<>
+                        <Link href="/auth/login">
+                            <button
+                                className="flex items-center gap-3 w-full cursor-pointer rounded-lg px-4 py-3 
+                    text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-500">
+                                <Settings className="h-5 w-5" />
+                                <span>Setting</span>
+                            </button>
+                        </Link>
+
+                        <Link href="/auth/login">
+                            <button
+                                className="flex items-center gap-3 w-full cursor-pointer rounded-lg px-4 py-3 
+                    text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-500">
+                                <User className="h-5 w-5" />
+                                <span>Profile</span>
+                            </button>
+                        </Link>
+
+
+
+                        <button
+                            onClick={handleLogOut}
+                            className="flex items-center gap-3 w-full cursor-pointer rounded-lg px-4 py-3 
+                    text-sm font-medium text-slate-700 hover:bg-red-50 hover:text-red-400">
+                            <LogOut className="h-5 w-5" />
+                            <span>Logout</span>
+                        </button>
+
+                    </>
+                    )
+                    :
+                    (<Link href="/auth/login">
                         <button
                             className="flex items-center gap-3 w-full cursor-pointer rounded-lg px-4 py-3 
                     text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-500">
-                            <Shield className="h-5 w-5" />
+                            <LogIn className="h-5 w-5" />
                             <span>Login</span>
                         </button>
                     </Link>
+                    )}
 
-                    {/* <button
+                {/* <button
                         className="flex items-center gap-3 w-full cursor-pointer rounded-lg px-4 py-3 
                     text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-500">
                         <Shield className="h-5 w-5" />
                         <span>Admin</span>
                     </button> */}
-                </div>
-                {/* <nav className="space-y-1 p-2" aria-label="Account menu"> */}
+            </div>
+            {/* <nav className="space-y-1 p-2" aria-label="Account menu"> */}
 
-                {/* Admin */}
-                {/* <a
+            {/* Admin */}
+            {/* <a
                         href="#settings"
                         className="group flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-slate-900"
                     >
@@ -150,8 +249,8 @@ export default function Header() {
                         <span>Admin</span>
                     </button> */}
 
-                {/* Teacher */}
-                {/* <a
+            {/* Teacher */}
+            {/* <a
                         href="#settings"
                         className="group flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-slate-900"
                     >
@@ -160,8 +259,8 @@ export default function Header() {
                         </span>
                         <span>Teacher</span>
                     </a> */}
-                {/* Student */}
-                {/* <a
+            {/* Student */}
+            {/* <a
                         href="#settings"
                         className="group flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-slate-900"
                     >
@@ -172,20 +271,21 @@ export default function Header() {
                     </a>
                 </nav> */}
 
-                <hr className="my-2 border-slate-200" />
+            <hr className="my-2 border-slate-200" />
 
-                <div className="space-y-1 p-2">
-                    <button
-                        className="flex items-center w-full gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-500 cursor-pointer"
-                        onClick={() => setTheme("light")}>🌞 Light</button>
-                    <button
-                        className="flex items-center w-full gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-500 cursor-pointer"
-                        onClick={() => setTheme("dark")}>🌙 Dark</button>
-                    <button
-                        className="flex items-center w-full gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-500 cursor-pointer"
-                        onClick={() => setTheme("system")}>💻 System</button>
-                </div>
-            </Popover>
-        </header>
+            <div className="space-y-1 p-2">
+                <button
+                    className="flex items-center w-full gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-500 cursor-pointer"
+                    onClick={() => setTheme("light")}>🌞 Light</button>
+                <button
+                    className="flex items-center w-full gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-500 cursor-pointer"
+                    onClick={() => setTheme("dark")}>🌙 Dark</button>
+                <button
+                    className="flex items-center w-full gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-500 cursor-pointer"
+                    onClick={() => setTheme("system")}>💻 System</button>
+            </div>
+        </Popover>
+
+    </>
     );
 }

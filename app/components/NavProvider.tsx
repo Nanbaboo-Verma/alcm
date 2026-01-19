@@ -15,6 +15,8 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Calendar", href: "/calendar" },
   { label: "Career", href: "/career" },
   { label: "Gallery", href: "/gallery" },
+  // for admin 
+  { label: "Contact Info", href: "/contact-info" },
 ];
 
 type NavContextValue = {

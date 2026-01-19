@@ -1,8 +1,13 @@
 'use client';
+import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+
 
 export default function LoginPage() {
   const [login, setLogin] = useState({ email: '', password: '' });
+  
+const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -12,11 +17,40 @@ export default function LoginPage() {
     }));
   }
 
- const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    localStorage.setItem('login', JSON.stringify(login));
-    console.log('Stored:', login);
+
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(login),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.message);
+        return;
+      }
+
+      // store token
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      router.push("/");
+
+      // // redirect
+      // // window.location.href = "/dashboard";
+      // window.location.href = "/";
+
+
+
+    } catch (err) {
+      alert("Login failed");
+    }
   };
+
+
 
   return (
     <div className="flex items-center justify-center bg-gray-100 px-4 py-16">
@@ -65,9 +99,9 @@ export default function LoginPage() {
 
         <p className="text-center text-sm mt-4">
           Don’t have an account?{" "}
-          <a href="./signup" className="text-blue-600 hover:underline">
+          <Link href="/auth/signup" className="text-blue-500 hover:underline">
             Sign up
-          </a>
+          </Link>
         </p>
       </div>
     </div>
