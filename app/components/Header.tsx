@@ -18,15 +18,15 @@ export default function Header() {
     const lastY = useRef(0);
     const [userProfile, setUserProfile] = useState('');
 
-   useEffect(() => {
-  const loginData = localStorage.getItem("login");
+    useEffect(() => {
+        const loginData = localStorage.getItem("login");
 
-  if (loginData) {
-    const { email } = JSON.parse(loginData);
-    const initials = email.slice(0, 2).toUpperCase();
-    setUserProfile(initials);
-  }
-}, []);
+        if (loginData) {
+            const { email } = JSON.parse(loginData);
+            const initials = email.slice(0, 2).toUpperCase();
+            setUserProfile(initials);
+        }
+    }, []);
 
 
     useEffect(() => {
@@ -77,10 +77,12 @@ export default function Header() {
                         {userProfile === ' ' ? <User /> : userProfile}
                     </button>
 
-                    <button aria-label="Toggle menu" onClick={toggle} className="md:hidden border cursor-pointer p-1 rounded">
-                        <Menu />
+                    <button
+                        aria-label="Toggle menu"
+                        onClick={toggle}
+                        className="flex items-center justify-center h-9 w-9 md:hidden border border-blue-500 cursor-pointer rounded">
+                        <Menu color="blue"/>
                     </button>
-
                 </div>
             </div>
 
