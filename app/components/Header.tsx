@@ -116,13 +116,18 @@ export default function Header() {
 
     return (<>
         <header
-            className={`w-full bg-[#f3f0e8] transition-transform duration-300`}
+            className="sticky top-0 md:static z-50 md:shadow-none shadow w-full bg-[#f3f0e8] transition-transform duration-300"
         >
             {/* header content section */}
-            <div className="mx-auto max-w-7xl h-16 px-4 md:px-5 py-3 flex items-center justify-between">
+            <div className="mx-auto max-w-7xl sm:h-18 h-14 px-4 md:px-5 py-2 flex items-center justify-between">
                 <div className="text-center">
-                    <div className="text-lg font-semibold">NeoSOFT</div>
-                    <div className="text-sm">Demo Project</div>
+                    <div className="text-lg font-semibold">Logo</div>
+                    {/* <div className="text-sm">Demo Project</div> */}
+                </div>
+
+                <div className="text-center sm:block hidden">
+                    <h2 className="uppercase text-blue-600 text-xl sm:text-2xl md:text-3xl font-semibold">ALCM Modern Public School</h2>
+                    <p className="uppercase md:text-sm text-xs text-yellow-500">Chhaitikpurawa Ujjaini kalan, Gonda 271603</p>
                 </div>
 
                 <div className="flex gap-4 align-items-center" style={{ alignItems: "center" }}>
@@ -133,15 +138,15 @@ export default function Header() {
                     <button
                         ref={setTrigger}
                         onClick={() => setIsPopoverOpen(!isPopoverOpen)}
-                        className="h-10 w-10 flex align-items-center justify-center text-white text-2xl bg-blue-500 rounded-full hover:bg-blue-600 cursor-pointer">
-                        {userProfile === ' ' ? <User /> : userProfile}
+                        className="h-9 w-9 flex items-center justify-center text-white text-2xl bg-blue-500 rounded-full hover:bg-blue-600 cursor-pointer">
+                        {userProfile === '' ? <User /> : userProfile}
                     </button>
 
                     <button
                         aria-label="Toggle menu"
                         onClick={toggle}
-                        className="flex items-center justify-center h-9 w-9 md:hidden border border-blue-500 cursor-pointer rounded">
-                        <Menu color="blue" />
+                        className="flex items-center justify-center h-9 w-9 md:hidden border rounded-full border-black bg-white cursor-pointer">
+                        <Menu size={20}/>
                     </button>
                 </div>
             </div>
@@ -149,15 +154,16 @@ export default function Header() {
 
         {/* header nav section */}
         <div className={`bg-[#282A35] md:block hidden sticky top-0 z-50`}>
-            <div className="mx-auto max-w-7xl px-4 md:px-5 flex items-center justify-between">
+            <div className="mx-auto max-w-7xl px-4 md:px-5 flex items-center justify-between overflow-x-auto no-scrollbar">
                 <nav className="sm:flex text-[15px]">
                     {navItems.map((item) => {
                         const isActive = pathname === item.href;
+
                         return (
                             <Link
                                 key={item.href}
                                 href={item.href}
-                                className={`px-4 py-1.5 hover:underline text-[#f1f1f1] ${isActive ? "bg-black" : "hover:bg-black"
+                                className={`whitespace-nowrap px-4 py-1.5 hover:underline text-[#f1f1f1] ${isActive ? "bg-black" : "hover:bg-black"
                                     } hover:text-white`}
                             >
                                 {item.label}

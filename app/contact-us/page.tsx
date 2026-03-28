@@ -163,7 +163,7 @@ export default function ContactUsPage() {
           {error && <div className={styles.errorMessage}>✗ {error}</div>}
 
           <form onSubmit={handleSubmit} className={styles.form}>
-            <div className={styles.formRow}>
+            <div className={`${styles.formRow}`}>
               <div className={styles.formGroup}>
                 <label htmlFor="firstName" className={styles.label}>
                   First Name <span className={styles.required}>*</span>

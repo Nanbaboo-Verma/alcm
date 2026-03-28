@@ -15,11 +15,11 @@ export default function Sidebar() {
         <div className="fixed inset-0 z-50 md:hidden">
           <div className="fixed inset-0 bg-black/40"
             onClick={close} />
-          <aside className="relative w-70 h-full bg-white dark:bg-black">
+          <aside className="relative w-72 h-full bg-white dark:bg-black">
             <div className="flex items-center justify-between border-b border-gray-400 px-4 py-2">
               <div className="space-y-0.5">
-                <h3 className="text-lg font-medium text-blue-600 uppercase">NeoSOFT Technology</h3>
-                <p className="text-xs text-yellow-500">Lower parel mumbai 200140</p>
+                <h3 className="text-lg font-medium text-blue-600 uppercase" style={{fontSize: '17px'}}>ALCM Modern Public School</h3>
+                <p className="text-xs text-yellow-500">Chhaitikpurawa Ujjaini kalan, Gonda 271603</p>
               </div>
               {/* <button onClick={close} className=""><X size={18} color="gray"/></button> */}
             </div>

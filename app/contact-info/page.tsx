@@ -59,8 +59,6 @@ export default function ContactInfoPage() {
   }, [search, contacts]);
 
 
-
-
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-black py-8 px-4">
       <div className="max-w-6xl mx-auto bg-white dark:bg-zinc-900 p-8 rounded-lg shadow-md">

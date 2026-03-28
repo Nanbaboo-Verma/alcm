@@ -55,7 +55,7 @@ const Mater: React.FC = () => {
         {/* Heading */}
         <h2 className="text-4xl font-bold">
           <span className="text-blue-800">Welcome To </span>
-          <span className="text-yellow-400">Alma Mater</span>
+          <span className="text-yellow-400">Alcm Mater</span>
         </h2>
 
         <div className="w-16 h-1 bg-gray-200 mx-auto mt-4 mb-16 rounded" />
