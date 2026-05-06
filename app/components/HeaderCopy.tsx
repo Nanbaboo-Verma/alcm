@@ -101,11 +101,11 @@ export default function Header() {
                 <div className="mx-auto max-w-7xl px-4 md:px-5 flex items-center justify-between">
                     <nav className="sm:flex text-[15px]">
                         {navItems.map((item) => {
-                            const isActive = pathname === item.href;
+                            const isActive = pathname === item.path;
                             return (
                                 <Link
-                                    key={item.href}
-                                    href={item.href}
+                                    key={item.path}
+                                    href={item.path}
                                     className={`px-4 py-1.5 hover:underline text-[#f1f1f1] ${isActive ? "bg-black" : "hover:bg-black"
                                         } hover:text-white`}
                                 >
