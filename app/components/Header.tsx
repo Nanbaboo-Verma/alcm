@@ -7,6 +7,8 @@ import { useNav } from "./NavProvider";
 import { ArrowLeft, BookOpen, LogIn, LogOut, Menu, Settings, Shield, User, Users } from "react-feather";
 import Popover from "./Popover";
 import { useTheme } from "next-themes";
+import logo from "../../public/assets/images/alcm_logo.png"
+import alcmAddress from "../../public/assets/images/alcm_address.png"
 
 export default function Header() {
     const { navItems, toggle } = useNav();
@@ -116,18 +118,26 @@ export default function Header() {
 
     return (<>
         <header
-            className="sticky top-0 md:static z-50 md:shadow-none shadow w-full bg-[#f3f0e8] transition-transform duration-300"
+            className="sticky top-0 md:static z-50 md:shadow-none shadow w-full bg-white bg--[--#f3f0e8] transition-transform duration-300"
         >
-            {/* header content section */}
-            <div className="mx-auto max-w-7xl sm:h-18 h-14 px-4 md:px-5 py-2 flex items-center justify-between">
-                <div className="text-center">
-                    <div className="text-lg font-semibold">Logo</div>
+                             {/* <div className="absolute left-0 top-0 w-1/6 h-full opacity-30">
+    <div className="w-full h-full bg-[radial-gradient(circle,_#9ca3af_1px,_transparent_1px)] 
+                bg-[size:10px_10px]">
+    </div>
+  </div> */}
+            {/* header content section sm:h-18 h-14 */}
+            <div className="mx-auto max-w-7xl px-4 md:px-5 py-3 flex items-center justify-between">
+                <div className="w-20">
+                    {/* <div className="text-lg font-semibold"> */}
+                        <img src={logo.src} alt="" />
+                    {/* </div> */}
                     {/* <div className="text-sm">Demo Project</div> */}
                 </div>
 
                 <div className="text-center sm:block hidden">
-                    <h2 className="uppercase text-blue-600 text-xl sm:text-2xl md:text-3xl font-semibold">ALCM Modern Public School</h2>
-                    <p className="uppercase md:text-sm text-xs text-yellow-500">Chhaitikpurawa Ujjaini kalan, Gonda 271603</p>
+                    <img src={alcmAddress.src} alt="" className="max-w-md"/>
+                    {/* <h2 className="uppercase text-blue-600 text-xl sm:text-2xl md:text-3xl font-semibold">ALCM Modern Public School</h2>
+                    <p className="uppercase md:text-sm text-xs text-yellow-500">Chhaitikpurawa Ujjaini kalan, Gonda 271603</p> */}
                 </div>
 
                 <div className="flex gap-4 align-items-center" style={{ alignItems: "center" }}>
@@ -153,21 +163,21 @@ export default function Header() {
         </header>
 
         {/* header nav section */}
-        <div className={`bg-[#282A35] md:block hidden sticky top-0 z-50`}>
-            <div className="mx-auto max-w-7xl px-4 md:px-5 flex items-center justify-between overflow-x-auto no-scrollbar">
-                <nav className="sm:flex text-[15px]">
+        <div className={`bg-[#062a5f] md:block hidden sticky top-0 z-50`}>
+            <div className="mx-auto max-w-7xl px-4 md:px-5 py-1 flex items-center justify-between overflow-x-auto no-scrollbar">
+                <nav className="sm:flex text-[15px] space-x-1">
                     {navItems.map((item) => {
-                        const isActive = pathname === item.href;
+                        const isActive = pathname === item.path;
 
                         return (
                             <Link
-                                key={item.href}
-                                href={item.href}
-                                className={`whitespace-nowrap px-4 py-1.5 hover:underline text-[#f1f1f1] ${isActive ? "bg-black" : "hover:bg-black"
+                                key={item.path}
+                                href={item.path}
+                                className={`flex gap-2 items-center whitespace-nowrap px-3 py-2 hover:underline text-[#f1f1f1] rounded-lg ${isActive ? "bg-[#3763c4]" : "hover:bg-[#3763c4]"
                                     } hover:text-white`}
                             >
-                                {item.label}
-
+                                <span>{item.icon}</span>
+                                <span>{item.label}</span>
                             </Link>
                         );
                     })}

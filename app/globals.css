@@ -2,12 +2,14 @@
 
 /* colors */
 .primary {
-  color: blue;
+  color: #3763c4; 
+  /* color: blue; */
   /* bg-blue-600 */
 }
 
 .secondary {
-  color: yellow;
+  color: #eab752;
+  /* color: yellow; */
   /* bg-amber-200 */
 }
 
@@ -21,4 +23,12 @@
 .no-scrollbar {
  -ms-overflow-style: none;/*IE Edge*/
  scrollbar-width: none; /* firefox*/
+}
+
+.sticky.top-0 {
+  h2 {
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    -webkit-text-stroke: 1px #157ef1;
+  }
 }

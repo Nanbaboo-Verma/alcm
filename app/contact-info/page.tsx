@@ -91,10 +91,14 @@ export default function ContactInfoPage() {
         </div>
 
 
-        {loading ? (
-          <div className="text-center py-8">
+        {loading ? (<>
+          {/* <div className="text-center py-8">
             <p className="text-gray-600 dark:text-gray-400">Loading contacts...</p>
+          </div> */}
+          <div className="flex items-center justify-center h-screen">
+            <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
           </div>
+          </>
         ) : error ? (
           <div className="bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 p-4 rounded-lg">
             ✗ {error}

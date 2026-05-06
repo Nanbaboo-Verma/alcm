@@ -25,10 +25,10 @@ export default function Sidebar() {
             </div>
             <ul className="p-4 overflow-auto space-y-1" style={{ height: "calc(100vh - 78px)" }}>
               {navItems.map((item) => {
-                const activeNav = active === item.href?'bg-blue-50 text-blue-600':'text-gray-700';
+                const activeNav = active === item.path?'bg-blue-50 text-blue-600':'text-gray-700';
 
-                return <li key={item.href} className="">
-                  <Link href={item.href} onClick={close} 
+                return <li key={item.path} className="">
+                  <Link href={item.path} onClick={close} 
                   className={`flex items-center gap-3 px-3 py-2.5 text-[13px] rounded ${activeNav} hover:bg-blue-50 hover:text-blue-600 hover:underline`}>
                     <Home size={16} /> {item.label}
                   </Link>

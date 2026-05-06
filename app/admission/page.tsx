@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Stepper, { Step } from "../components/Stepper";
 
 // export const metadata = {
 //   title: "Admission Form - MyApp",
@@ -102,10 +103,41 @@ export default function AdmissionForm() {
     const currentYear = new Date().getFullYear();
     const years = Array.from({ length: 10 }, (_, i) => (currentYear - 5 + i).toString());
 
+
+
+    // ---------------- USAGE EXAMPLE ----------------
+
+
+  const steps: Step[] = [
+    {
+      id: 1,
+      title: "Application Form",
+      content: <div>Fill your application form here</div>,
+    },
+    {
+      id: 2,
+      title: "Edit",
+      content: <div>Edit your details</div>,
+    },
+    {
+      id: 3,
+      title: "Payment",
+      content: <div>Make your payment</div>,
+    },
+    {
+      id: 4,
+      title: "Success",
+      content: <div>🎉 Submission Successful</div>,
+    },
+  ];
+
+
+
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-black py-8 px-4">
             <div className="max-w-4xl mx-auto bg-white dark:bg-zinc-900 p-8 rounded-lg shadow-md">
                 <div className="text-center">
+                    <Stepper steps={steps} />
                     <h1 className="text-3xl font-bold mb-2 text-black dark:text-white">
                         Student Admission Form
                     </h1>

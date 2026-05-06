@@ -1,4 +1,6 @@
 import React from "react";
+import { Send } from "react-feather";
+
 
 type Feature = {
   title: string;
@@ -50,7 +52,14 @@ const features: Feature[] = [
 
 const Mater: React.FC = () => {
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-cover bg-repeat-round" style={{ backgroundImage: "url('/assets/images/matter/bg_theme.png')" }}>
+      {/* <div className="absolute left-6 top-6 opacity-70">
+        <div className="grid grid-cols-6 gap-2 mask-fade">
+          {Array.from({ length: 36 }).map((_, i) => (
+            <div key={i} className="w-1 h-1 bg-blue-300 rounded-full"></div>
+          ))}
+        </div>
+      </div> */}
       <div className="max-w-7xl mx-auto px-4 text-center">
         {/* Heading */}
         <h2 className="text-4xl font-bold">
@@ -63,7 +72,7 @@ const Mater: React.FC = () => {
         {/* Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {features.map((feature, index) => (
-            <div key={index} className="flex flex-col items-center">
+            <div key={index} className="bg-white shadow px-4 py-5 rounded-lg flex flex-col items-center">
               {feature.icon}
 
               <h3 className="mt-6 text-2xl font-semibold text-blue-800">
@@ -80,6 +89,16 @@ const Mater: React.FC = () => {
             </div>
           ))}
         </div>
+      </div>
+      <div className="flex justify-center">
+        <button type="submit" className="flex items-center gap-2 h-10 md:h-11 mt-16 md:text-base 
+                          text-sm font-normal md:px-5 px-4 rounded-3xl cursor-pointer
+                          bg-gradient-to-r from-blue-600 to-blue-800 
+                          text-white font-medium 
+                          shadow-lg shadow-blue-300/50 
+                          hover:scale-105 transition duration-300">
+          <Send size={18} />
+          Get Started</button>
       </div>
     </section>
   );
