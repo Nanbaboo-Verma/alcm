@@ -1,3 +1,5 @@
+import ToperStudents from "../home/ToperStudents/page";
+
 export const metadata = {
   title: "About - MyApp",
   description: "About page",
@@ -36,7 +38,7 @@ const students: Student[] = [
     fatherName: "Mr. Verma",
     motherName: "Mrs. Verma",
   },
-    {
+  {
     sid: "103",
     name: "Priya Verma",
     className: "9B",
@@ -46,7 +48,7 @@ const students: Student[] = [
     fatherName: "Mr. Verma",
     motherName: "Mrs. Verma",
   },
-    {
+  {
     sid: "104",
     name: "Priya Verma",
     className: "9B",
@@ -71,70 +73,71 @@ export default function About() {
 
 
 
-      <div className="overflow-x-auto relative">
-      <table className="min-w-full border border-gray-300 shadow-md rounded-lg">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="px-4 py-2 border whitespace-nowrap sticky left-0 bg-gray-100">SID</th>
-            <th className="px-4 py-2 border whitespace-nowrap sticky left-16 bg-gray-100">Name</th>
-            <th className="px-4 py-2 border whitespace-nowrap">Class</th>
-            <th className="px-4 py-2 border whitespace-nowrap">Aadhar Number</th>
-            <th className="px-4 py-2 border whitespace-nowrap">Mobile Number</th>
-            <th className="px-4 py-2 border whitespace-nowrap">Email</th>
-            <th className="px-4 py-2 border whitespace-nowrap">Father Name</th>
-            <th className="px-4 py-2 border whitespace-nowrap">Mother Name</th>
-            <th className="px-4 py-2 border whitespace-nowrap sticky right-0 bg-gray-100">
-              Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {students.map((student, index) => (
-            <tr
-              key={student.sid}
-              className={`${
-                index % 2 === 0 ? "bg-white" : "bg-gray-50"
-              } hover:bg-gray-100`}
-            >
-              <td className="px-4 py-2 border sticky left-0 bg-inherit whitespace-nowrap">
-                {student.sid}
-              </td>
-              <td className="px-4 py-2 border sticky left-16 bg-inherit whitespace-nowrap">
-                {student.name}
-              </td>
-              <td className="px-4 py-2 border whitespace-nowrap">
-                {student.className}
-              </td>
-              <td className="px-4 py-2 border whitespace-nowrap">
-                {student.aadhar}
-              </td>
-              <td className="px-4 py-2 border whitespace-nowrap">
-                {student.mobile}
-              </td>
-              <td className="px-4 py-2 border whitespace-nowrap">
-                {student.email}
-              </td>
-              <td className="px-4 py-2 border whitespace-nowrap">
-                {student.fatherName}
-              </td>
-              <td className="px-4 py-2 border whitespace-nowrap">
-                {student.motherName}
-              </td>
-              <td className="px-4 py-2 border sticky right-0 bg-inherit whitespace-nowrap">
-                <div className="flex gap-2">
-                  <button className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
-                    Edit
-                  </button>
-                  <button className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
-                    Delete
-                  </button>
-                </div>
-              </td>
+      <div className="overflow-x-auto relative mb-10">
+        <table className="min-w-full border border-gray-300 shadow-md rounded-lg">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="px-4 py-2 border whitespace-nowrap sticky left-0 bg-gray-100">SID</th>
+              <th className="px-4 py-2 border whitespace-nowrap sticky left-16 bg-gray-100">Name</th>
+              <th className="px-4 py-2 border whitespace-nowrap">Class</th>
+              <th className="px-4 py-2 border whitespace-nowrap">Aadhar Number</th>
+              <th className="px-4 py-2 border whitespace-nowrap">Mobile Number</th>
+              <th className="px-4 py-2 border whitespace-nowrap">Email</th>
+              <th className="px-4 py-2 border whitespace-nowrap">Father Name</th>
+              <th className="px-4 py-2 border whitespace-nowrap">Mother Name</th>
+              <th className="px-4 py-2 border whitespace-nowrap sticky right-0 bg-gray-100">
+                Actions
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            {students.map((student, index) => (
+              <tr
+                key={student.sid}
+                className={`${index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                  } hover:bg-gray-100`}
+              >
+                <td className="px-4 py-2 border sticky left-0 bg-inherit whitespace-nowrap">
+                  {student.sid}
+                </td>
+                <td className="px-4 py-2 border sticky left-16 bg-inherit whitespace-nowrap">
+                  {student.name}
+                </td>
+                <td className="px-4 py-2 border whitespace-nowrap">
+                  {student.className}
+                </td>
+                <td className="px-4 py-2 border whitespace-nowrap">
+                  {student.aadhar}
+                </td>
+                <td className="px-4 py-2 border whitespace-nowrap">
+                  {student.mobile}
+                </td>
+                <td className="px-4 py-2 border whitespace-nowrap">
+                  {student.email}
+                </td>
+                <td className="px-4 py-2 border whitespace-nowrap">
+                  {student.fatherName}
+                </td>
+                <td className="px-4 py-2 border whitespace-nowrap">
+                  {student.motherName}
+                </td>
+                <td className="px-4 py-2 border sticky right-0 bg-inherit whitespace-nowrap">
+                  <div className="flex gap-2">
+                    <button className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
+                      Edit
+                    </button>
+                    <button className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+                      Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <ToperStudents />
     </div>
   );
 }

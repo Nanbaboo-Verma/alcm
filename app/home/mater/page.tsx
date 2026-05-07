@@ -62,12 +62,13 @@ const Mater: React.FC = () => {
       </div> */}
       <div className="max-w-7xl mx-auto px-4 text-center">
         {/* Heading */}
-        <h2 className="text-4xl font-bold">
+        <h2 className="text-3xl font-bold">
           <span className="text-blue-800">Welcome To </span>
           <span className="text-yellow-400">Alcm Mater</span>
         </h2>
 
-        <div className="w-16 h-1 bg-gray-200 mx-auto mt-4 mb-16 rounded" />
+        {/* <div className="w-16 h-1 bg-gray-200 mx-auto mt-4 mb-16 rounded" /> */}
+        <div className="w-24 h-1 mx-auto mt-2 mb-4 rounded bg-gradient-to-r from-blue-800 to-yellow-400" />
 
         {/* Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">

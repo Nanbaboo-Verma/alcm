@@ -12,16 +12,16 @@ const testimonials: Testimonial[] = [
     text: `Been using the theme for 4-5 years or more, should’ve given a review earlier.
 I’m not a web design pro but I know the basics. Whenever I run into a little trouble
 TrueThemes is always super quick and helpful.`,
-    name: "Ronald Richards",
-    role: "Designer, Facebook",
+    name: "Arvinda Kumar Verma",
+    role: "UP Police",
     image: "https://randomuser.me/api/portraits/men/32.jpg",
   },
   {
     text: `Simple and elegant with a host of options. Easy to set up and provides a
 beautiful professional looking end product.`,
-    name: "Theresa Webb",
-    role: "CEO, Quicky",
-    image: "https://randomuser.me/api/portraits/women/44.jpg",
+    name: "Bramha Singh",
+    role: "UP Police",
+    image: "https://randomuser.me/api/portraits/women/26.jpg",
   },
   {
     text: `I couldn’t thank enough these guys for helping me with all my questions.
@@ -34,18 +34,21 @@ I might have given them lots of emails, but they always replied on time.`,
 
 const TrustedStudentsTestimonials: React.FC = () => {
   return (
-    <section className="py-24 bg-white">
+    <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 text-center">
         {/* Heading */}
-        <h2 className="text-4xl font-bold">
+        <h2 className="text-3xl font-bold">
           <span className="text-blue-800">We've Proud </span>
           <span className="text-yellow-400">Trusted Students</span>
         </h2>
 
-        <div className="w-16 h-1 bg-gray-200 mx-auto mt-6 mb-20 rounded" />
-
+        {/* <div className="w-16 h-1 bg-gray-200 mx-auto mt-6 mb-20 rounded" /> */}
+        <div className="w-24 h-1 mx-auto mt-2 mb-4 rounded bg-gradient-to-r from-blue-800 to-yellow-400" />
+        <p className="text-sm text-gray-500">
+          Simple and elegant with a host of options. Easy to set up and provides a beautiful
+        </p>
         {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-14">
           {testimonials.map((item, index) => (
             <div
               key={index}

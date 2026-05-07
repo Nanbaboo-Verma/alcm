@@ -2,14 +2,19 @@ import React from "react";
 
 const LookingFor: React.FC = () => {
   return (
-    <section className="bg-gray-50 py-20">
+    <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4">
         
         {/* Heading */}
         <div className="mb-14 text-center">
-          <h2 className="text-3xl font-bold text-gray-900">
+          {/* <h2 className="text-3xl font-bold text-gray-900">
             What You Looking for?
-          </h2>
+          </h2> */}
+           <h2 className="text-3xl font-bold">
+              <span className="text-blue-800"> What You </span>
+              <span className="text-yellow-400">Looking for?</span>
+            </h2>
+            <div className="w-24 h-1 mx-auto mt-2 mb-4 rounded bg-gradient-to-r from-blue-800 to-yellow-400" />
           <p className="mx-auto mt-3 max-w-xl text-sm text-gray-500">
             Our dynamic educational platform offers you the tools and resources
             to propel yourself towards a brighter future.

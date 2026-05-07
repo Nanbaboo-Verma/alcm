@@ -5,17 +5,17 @@ import Mater from "./home/mater/page";
 import TrustedStudentsTestimonials from "./components/TrustedStudents";
 import TrendingCourses from "./components/TrendingCourses";
 import NewHeader from "./components/NewHeader";
+import ToperStudents from "./home/ToperStudents/page";
 
 export default function Home() {
   return (
     <div>
       <Banner />
+      <Student />
       <Mater />
       <LookingFor />
       <TrendingCourses />
-      <Student />
       <TrustedStudentsTestimonials />
-      
     </div>
   );
 }

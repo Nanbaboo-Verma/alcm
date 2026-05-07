@@ -41,16 +41,21 @@ const courses: Course[] = [
 
 const TrendingCourses: React.FC = () => {
   return (
-    <section className="py-24 bg-gradient-to-b from-slate-50 to-white">
+    <section className="py-24 bg-[#f4f7ff]">
       <div className="max-w-7xl mx-auto px-4 text-center">
-        <h2 className="text-4xl font-bold">
+        <h2 className="text-3xl font-bold">
           <span className="text-blue-800">Trending Courses </span>
           <span className="text-yellow-400">For You</span>
         </h2>
 
-        <div className="w-16 h-1 bg-gray-200 mx-auto mt-6 mb-16 rounded" />
+        {/* <div className="w-16 h-1 bg-gray-200 mx-auto mt-6 mb-16 rounded" /> */}
+        <div className="w-24 h-1 mx-auto mt-2 mb-4 rounded bg-gradient-to-r from-blue-800 to-yellow-400" />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+         <p className="text-sm text-gray-500">
+          Simple and elegant with a host of options. Easy to set up and provides a beautiful
+         </p>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 mt-14">
           {courses.map((course, index) => (
             <div
               key={index}

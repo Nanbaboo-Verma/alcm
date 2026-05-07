@@ -3,7 +3,7 @@ import React from 'react';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-[#f3f0e8] px-6 py-10">
+    <footer className="px-6 py-10 bg-[#f4f7ff]">
       <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6 text-sm">
         <div>
           <h3 className="font-semibold mb-2">Education</h3>
@@ -62,10 +62,10 @@ const Footer: React.FC = () => {
             <a href="#">Terms of Use</a>
           </div>
           <div>
-            Design by <span className="font-medium">Ryllic Studio</span>
+            Design by <span className="font-medium">alcm</span>
           </div>
         </div>
-        <div className="mt-2">© EduKids Inc. All rights reserved.</div>
+        <div className="mt-2">© alcm public school. All rights reserved.</div>
       </div>
     </footer>
   );
