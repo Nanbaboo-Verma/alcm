@@ -14,6 +14,7 @@ export default function Calendar() {
       setCalendarHtml(data);
     }
     fetchCalendar();
+    
   }, []);
 
   return (
