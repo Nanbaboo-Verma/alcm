@@ -1,16 +1,7 @@
 import mongoose, { Schema, model, models } from "mongoose";
+import type { UserRole, IUser } from "@/types/auth";
 
-export type UserRole = "student" | "teacher" | "admin";
-
-export interface IUser {
-  name: string;
-  email: string;
-  password: string;
-  role: UserRole;
-  isActive: boolean;
-  resetPasswordToken?: string;
-  resetPasswordExpires?: Date;
-}
+export type { UserRole, IUser };
 
 const userSchema = new Schema<IUser>(
   {

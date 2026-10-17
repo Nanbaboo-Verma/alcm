@@ -1,16 +1,14 @@
 "use client";
 
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useNav } from "./NavProvider";
 import {
-  ArrowLeft,
   BookOpen,
   LogIn,
   LogOut,
   Menu,
-  Settings,
   Shield,
   User,
   Users,
@@ -19,84 +17,27 @@ import Popover from "./Popover";
 import { useTheme } from "next-themes";
 import logo from "../../public/assets/images/alcm_logo.png";
 import alcmAddress from "../../public/assets/images/alcm_address.png";
+import { useAuth } from "@/app/features/auth/AuthContext";
 
 export default function Header() {
   const { navItems, toggle } = useNav();
   const pathname = usePathname();
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [trigger, setTrigger] = useState<HTMLElement | null>(null);
-  const { theme, setTheme } = useTheme();
-  const [showTop, setShowTop] = useState(false);
+  const { setTheme } = useTheme();
   const lastY = useRef(0);
-  const [userProfile, setUserProfile] = useState("");
-  const [admin, setAdmin] = useState(false);
-  const [mounted, setMounted] = useState(false);
-  // const [userDetails,setUserDetails] = useState({})
-  // const [userDetails, setUserDetails] = useState(() => {
-  //     if (typeof window !== "undefined") {
-  //         const data = localStorage.getItem("user");
-  //         return data ? JSON.parse(data) : null;
-  //     }
-  //     return null;
-  // });
 
-  // useEffect(() => {
-  //     const loginData = localStorage.getItem("user");
+  const { user, role, isAuthenticated, logout } = useAuth();
 
-  //     if (loginData) {
-  //         const { email } = JSON.parse(loginData);
-  //         const initials = email.slice(0, 2).toUpperCase();
-  //         const isAdmin = JSON.parse(loginData).admin;
-  //         setUserProfile(initials);
-  //         setAdmin(isAdmin);
-  //        setUserDetails(email)
-  //     }
-
-  // }, []);
-
-  // useLayoutEffect(() => {
-  //     const loginData = localStorage.getItem("user");
-
-  //     if (loginData) {
-  //         const user = JSON.parse(loginData);
-
-  //         const initials = user.email.slice(0, 2).toUpperCase();
-
-  //         setUserProfile(initials);
-  //         setAdmin(user.admin);
-  //         setUserDetails(user.email);
-  //     }
-  // }, []);
-
-  useEffect(() => {
-    setMounted(true);
-
-    const loginData = localStorage.getItem("user");
-
-    if (loginData) {
-      const user = JSON.parse(loginData);
-
-      // setUserDetails(user);
-      setAdmin(user.admin);
-      setUserProfile(user.email.slice(0, 2).toUpperCase());
-    }
-  }, []);
+  const userInitials = user?.name
+    ? user.name.slice(0, 2).toUpperCase()
+    : user?.email
+    ? user.email.slice(0, 2).toUpperCase()
+    : "";
 
   useEffect(() => {
     const onScroll = () => {
       const currentY = window.scrollY;
-
-      // Detect direction
-      if (currentY > lastY.current && currentY >= 64) {
-        // 🔽 Scrolling DOWN
-        setShowTop(false);
-        // console.log("DOWN");
-      } else if (currentY < lastY.current) {
-        // 🔼 Scrolling UP
-        setShowTop(true);
-        // console.log("UP");
-      }
-
       lastY.current = currentY;
     };
 
@@ -107,54 +48,40 @@ export default function Header() {
     };
   }, []);
 
-  //
-  // console.log(userDetails, admin, 'userProfile')
-  // const isAuthenticated = admin && Object.keys(userDetails).length > 0 ? true : false\
-  const isAuthenticated = Boolean(userProfile && admin);
-
-  console.log(isAuthenticated, "isAuth");
-
-  const handleLogOut = () => {
-    localStorage.removeItem("user");
-  };
-
   return (
     <>
-      <header className="sticky top-0 md:static z-50 md:shadow-none shadow w-full bg-white bg--[--#f3f0e8] transition-transform duration-300">
-        {/* <div className="absolute left-0 top-0 w-1/6 h-full opacity-30">
-    <div className="w-full h-full bg-[radial-gradient(circle,_#9ca3af_1px,_transparent_1px)] 
-                bg-[size:10px_10px]">
-    </div>
-  </div> */}
-        {/* header content section sm:h-18 h-14 */}
+      <header className="sticky top-0 md:static z-50 md:shadow-none shadow w-full bg-white transition-transform duration-300">
         <div className="mx-auto max-w-7xl px-4 md:px-5 py-3 flex items-center justify-between">
           <div className="w-20">
-            {/* <div className="text-lg font-semibold"> */}
-            <img src={logo.src} alt="" />
-            {/* </div> */}
-            {/* <div className="text-sm">Demo Project</div> */}
+            <Link href="/">
+              <img src={logo.src} alt="ALCM Logo" className="cursor-pointer" />
+            </Link>
           </div>
 
           <div className="text-center sm:block hidden">
-            <img src={alcmAddress.src} alt="" className="max-w-md" />
-            {/* <h2 className="uppercase text-blue-600 text-xl sm:text-2xl md:text-3xl font-semibold">ALCM Modern Public School</h2>
-                    <p className="uppercase md:text-sm text-xs text-yellow-500">Chhaitikpurawa Ujjaini kalan, Gonda 271603</p> */}
+            <img src={alcmAddress.src} alt="ALCM Address" className="max-w-md" />
           </div>
 
           <div
             className="flex gap-4 align-items-center"
             style={{ alignItems: "center" }}
           >
-            {/* <button className="py-2 px-4 rounded-lg text-sm text-white bg-blue-600 hover:bg-blue-700 cursor-pointer">
-                        Admission
-                    </button> */}
-
+            {/* User Profile / Login Avatar */}
             <button
               ref={setTrigger}
               onClick={() => setIsPopoverOpen(!isPopoverOpen)}
-              className="h-9 w-9 flex items-center justify-center text-white text-2xl bg-blue-500 rounded-full hover:bg-blue-600 cursor-pointer"
+              className={`h-9 w-9 flex items-center justify-center text-white text-xs font-bold rounded-full transition shadow-xs cursor-pointer ${
+                role === "admin"
+                  ? "bg-purple-600 hover:bg-purple-700"
+                  : role === "teacher"
+                  ? "bg-emerald-600 hover:bg-emerald-700"
+                  : role === "student"
+                  ? "bg-blue-600 hover:bg-blue-700"
+                  : "bg-blue-500 hover:bg-blue-600"
+              }`}
+              title={isAuthenticated ? `${user?.name} (${role})` : "Account"}
             >
-              {userProfile === "" ? <User /> : userProfile}
+              {isAuthenticated && userInitials ? userInitials : <User size={18} />}
             </button>
 
             <button
@@ -168,8 +95,8 @@ export default function Header() {
         </div>
       </header>
 
-      {/* header nav section */}
-      <div className={`bg-[#062a5f] md:block hidden sticky top-0 z-50`}>
+      {/* Header Navigation Section */}
+      <div className="bg-[#062a5f] md:block hidden sticky top-0 z-50">
         <div className="mx-auto max-w-7xl px-4 md:px-5 py-1 flex items-center justify-between overflow-x-auto no-scrollbar">
           <nav className="sm:flex text-[15px] space-x-1">
             {navItems.map((item) => {
@@ -197,122 +124,147 @@ export default function Header() {
         onClose={() => setIsPopoverOpen(false)}
         triggerElement={trigger}
         direction="left"
-        popoverWidth={250}
-        customClass="bg-blue-50"
+        popoverWidth={280}
+        customClass="bg-white shadow-xl rounded-2xl border border-slate-200"
       >
-        <div className="space-y-1 p-2">
-          {isAuthenticated ? (
+        <div className="space-y-1 p-3">
+          {isAuthenticated && user ? (
             <>
-              <Link href="/login">
-                <button
-                  className="flex items-center gap-3 w-full cursor-pointer rounded-lg px-4 py-3 
-                    text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-500"
-                >
-                  <Settings className="h-5 w-5" />
-                  <span>Setting</span>
-                </button>
-              </Link>
+              {/* User Identity Info */}
+              <div className="px-3 py-2 bg-slate-50 rounded-xl mb-2 border border-slate-100">
+                <p className="font-bold text-sm text-slate-900 truncate">{user.name}</p>
+                <p className="text-[11px] text-slate-500 truncate">{user.email}</p>
+                <div className="mt-1.5">
+                  <span
+                    className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                      role === "admin"
+                        ? "bg-purple-100 text-purple-800"
+                        : role === "teacher"
+                        ? "bg-emerald-100 text-emerald-800"
+                        : "bg-blue-100 text-blue-800"
+                    }`}
+                  >
+                    {role === "admin" && "🛡️ Admin"}
+                    {role === "teacher" && "👨‍🏫 Teacher"}
+                    {role === "student" && "🎓 Student"}
+                  </span>
+                </div>
+              </div>
 
-              <Link href="/login">
-                <button
-                  className="flex items-center gap-3 w-full cursor-pointer rounded-lg px-4 py-3 
-                    text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-500"
+              {/* Role-Specific Dashboard Access */}
+              {role === "student" && (
+                <Link
+                  href="/student/dashboard"
+                  onClick={() => setIsPopoverOpen(false)}
+                  className="flex items-center gap-3 w-full rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-blue-50 hover:text-blue-600 transition"
                 >
-                  <User className="h-5 w-5" />
-                  <span>Profile</span>
-                </button>
-              </Link>
+                  <Users className="h-4 w-4 text-blue-600" />
+                  <span>Student Portal</span>
+                </Link>
+              )}
+
+              {role === "teacher" && (
+                <Link
+                  href="/teacher/dashboard"
+                  onClick={() => setIsPopoverOpen(false)}
+                  className="flex items-center gap-3 w-full rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-600 transition"
+                >
+                  <BookOpen className="h-4 w-4 text-emerald-600" />
+                  <span>Teacher Portal</span>
+                </Link>
+              )}
+
+              {role === "admin" && (
+                <>
+                  <Link
+                    href="/admin/dashboard"
+                    onClick={() => setIsPopoverOpen(false)}
+                    className="flex items-center gap-3 w-full rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-purple-50 hover:text-purple-600 transition"
+                  >
+                    <Shield className="h-4 w-4 text-purple-600" />
+                    <span>Admin Control Center</span>
+                  </Link>
+
+                  <Link
+                    href="/teacher/dashboard"
+                    onClick={() => setIsPopoverOpen(false)}
+                    className="flex items-center gap-3 w-full rounded-xl px-3 py-2 text-xs font-medium text-slate-600 hover:bg-emerald-50 hover:text-emerald-600 transition"
+                  >
+                    <BookOpen className="h-4 w-4 text-emerald-500" />
+                    <span>Teacher View</span>
+                  </Link>
+
+                  <Link
+                    href="/student/dashboard"
+                    onClick={() => setIsPopoverOpen(false)}
+                    className="flex items-center gap-3 w-full rounded-xl px-3 py-2 text-xs font-medium text-slate-600 hover:bg-blue-50 hover:text-blue-600 transition"
+                  >
+                    <Users className="h-4 w-4 text-blue-500" />
+                    <span>Student View</span>
+                  </Link>
+                </>
+              )}
+
+              <hr className="my-2 border-slate-100" />
 
               <button
-                onClick={handleLogOut}
-                className="flex items-center gap-3 w-full cursor-pointer rounded-lg px-4 py-3 
-                    text-sm font-medium text-slate-700 hover:bg-red-50 hover:text-red-400"
+                onClick={() => {
+                  setIsPopoverOpen(false);
+                  logout();
+                }}
+                className="flex items-center gap-3 w-full rounded-xl px-3 py-2 text-xs font-semibold text-red-600 hover:bg-red-50 transition cursor-pointer"
               >
-                <LogOut className="h-5 w-5" />
+                <LogOut className="h-4 w-4 text-red-500" />
                 <span>Logout</span>
               </button>
             </>
           ) : (
-            <Link href="/login">
-              <button
-                className="flex items-center gap-3 w-full cursor-pointer rounded-lg px-4 py-3 
-                    text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-500"
+            <>
+              <Link
+                href="/login"
+                onClick={() => setIsPopoverOpen(false)}
+                className="flex items-center gap-3 w-full rounded-xl px-3 py-2.5 text-xs font-semibold text-blue-700 bg-blue-50/70 hover:bg-blue-100 transition"
               >
-                <LogIn className="h-5 w-5" />
-                <span>Login</span>
-              </button>
-            </Link>
+                <LogIn className="h-4 w-4" />
+                <span>Sign In to Portal</span>
+              </Link>
+
+              <Link
+                href="/signup"
+                onClick={() => setIsPopoverOpen(false)}
+                className="flex items-center gap-3 w-full rounded-xl px-3 py-2.5 text-xs font-medium text-slate-700 hover:bg-slate-100 transition"
+              >
+                <User className="h-4 w-4" />
+                <span>Create Account</span>
+              </Link>
+            </>
           )}
-
-          {/* <button
-                        className="flex items-center gap-3 w-full cursor-pointer rounded-lg px-4 py-3 
-                    text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-500">
-                        <Shield className="h-5 w-5" />
-                        <span>Admin</span>
-                    </button> */}
         </div>
-        {/* <nav className="space-y-1 p-2" aria-label="Account menu"> */}
 
-        {/* Admin */}
-        {/* <a
-                        href="#settings"
-                        className="group flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-slate-900"
-                    >
-                        <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg">
-                            <Shield className="h-5 w-5" />
-                        </span>
-                        <span>Admin</span>
-                    </a>
-                    <button
-                        className="flex items-center gap-3 w-full cursor-pointer rounded-lg px-4 py-3 
-                    text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-slate-900">
-                        <Shield className="h-5 w-5" />
-                        <span>Admin</span>
-                    </button> */}
-
-        {/* Teacher */}
-        {/* <a
-                        href="#settings"
-                        className="group flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-slate-900"
-                    >
-                        <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg">
-                            <BookOpen className="h-5 w-5" />
-                        </span>
-                        <span>Teacher</span>
-                    </a> */}
-        {/* Student */}
-        {/* <a
-                        href="#settings"
-                        className="group flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-slate-900"
-                    >
-                        <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg">
-                            <Users className="h-5 w-5" />
-                        </span>
-                        <span>Student</span>
-                    </a>
-                </nav> */}
-
-        <hr className="my-2 border-slate-200" />
+        <hr className="my-1 border-slate-100" />
 
         <div className="space-y-1 p-2">
-          <button
-            className="flex items-center w-full gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-500 cursor-pointer"
-            onClick={() => setTheme("light")}
-          >
-            🌞 Light
-          </button>
-          <button
-            className="flex items-center w-full gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-500 cursor-pointer"
-            onClick={() => setTheme("dark")}
-          >
-            🌙 Dark
-          </button>
-          <button
-            className="flex items-center w-full gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-500 cursor-pointer"
-            onClick={() => setTheme("system")}
-          >
-            💻 System
-          </button>
+          <p className="px-3 text-[10px] uppercase font-semibold tracking-wider text-slate-400">Theme</p>
+          <div className="grid grid-cols-3 gap-1 px-1">
+            <button
+              className="px-2 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100 rounded-lg text-center cursor-pointer"
+              onClick={() => setTheme("light")}
+            >
+              🌞 Light
+            </button>
+            <button
+              className="px-2 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100 rounded-lg text-center cursor-pointer"
+              onClick={() => setTheme("dark")}
+            >
+              🌙 Dark
+            </button>
+            <button
+              className="px-2 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100 rounded-lg text-center cursor-pointer"
+              onClick={() => setTheme("system")}
+            >
+              💻 Auto
+            </button>
+          </div>
         </div>
       </Popover>
     </>

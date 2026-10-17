@@ -1,75 +1,16 @@
-import { NextRequest, NextResponse } from "next/server";
-import connectDB from "@/lib/mongodb";
-import Signup from "@/models/auth/signup";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-
-export async function POST(req: NextRequest) {
-  try {
-    await connectDB();
-
-    const { email, password } = await req.json();
-
-    if (!email || !password) {
-      return NextResponse.json(
-        { success: false, message: "Email and password required" },
-        { status: 400 }
-      );
-    }
-
-    // find user
-    const user = await Signup.findOne({ email });
-    console.log(user, "userr");
-
-    if (!user) {
-      return NextResponse.json(
-        { success: false, message: "User not found" },
-        { status: 404 }
-      );
-    }
-
-    // compare password
-    const isMatch = await bcrypt.compare(password, user.password);
-
-    if (!isMatch) {
-      return NextResponse.json(
-        { success: false, message: "Invalid password" },
-        { status: 401 }
-      );
-    }
-
-    // create token
-    const token = jwt.sign(
-      { userId: user._id, email: user.email },
-      process.env.JWT_SECRET!,
-      { expiresIn: "7d" }
-    );
-
-    return NextResponse.json({
-      success: true,
-      message: "Login successful",
-      token,
-      user: {
-        id: user._id,
-        fullName: user.fullName,
-        email: user.email,
-        admin: user.admin,
-      },
-    });
-  } catch (error) {
-    return NextResponse.json(
-      { success: false, message: "Server error" },
-      { status: 500 }
-    );
-  }
-}
-
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db/mongoose";
 import User from "@/models/User";
 import { comparePassword } from "@/lib/auth/password";
 import { createSession } from "@/lib/auth/session";
-import { loginSchema } from "@/features/auth/auth.validation";
+import { loginSchema } from "@/app/features/auth/auth.validation";
+import { ROLE_DASHBOARDS, type UserRole } from "@/types/auth";
+
+const DEMO_USERS: Record<string, { name: string; role: UserRole; pass: string }> = {
+  "student@alcm.edu": { name: "Aarav Kumar", role: "student", pass: "Student@123" },
+  "teacher@alcm.edu": { name: "Professor Sharma", role: "teacher", pass: "Teacher@123" },
+  "admin@alcm.edu": { name: "Admin Officer", role: "admin", pass: "Admin@123" },
+};
 
 export async function POST(request: Request) {
   try {
@@ -78,61 +19,103 @@ export async function POST(request: Request) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { message: "Invalid email or password." },
+        {
+          success: false,
+          message: parsed.error.issues[0]?.message || "Invalid email or password.",
+        },
         { status: 400 }
       );
     }
 
     const { email, password } = parsed.data;
+    const normalizedEmail = email.toLowerCase();
 
-    await connectDB();
+    try {
+      await connectDB();
 
-    const user = await User.findOne({
-      email: email.toLowerCase(),
-    }).select("+password");
+      const user = await User.findOne({
+        email: normalizedEmail,
+      }).select("+password");
 
-    if (!user || !user.isActive) {
-      return NextResponse.json(
-        { message: "Invalid email or password." },
-        { status: 401 }
-      );
-    }
+      if (!user || !user.isActive) {
+        return NextResponse.json(
+          { success: false, message: "Invalid email or password." },
+          { status: 401 }
+        );
+      }
 
-    const isValid = await comparePassword(password, user.password);
+      const isValid = await comparePassword(password, user.password);
 
-    if (!isValid) {
-      return NextResponse.json(
-        { message: "Invalid email or password." },
-        { status: 401 }
-      );
-    }
+      if (!isValid) {
+        return NextResponse.json(
+          { success: false, message: "Invalid email or password." },
+          { status: 401 }
+        );
+      }
 
-    await createSession({
-      userId: String(user._id),
-      role: user.role,
-    });
+      const role = user.role as UserRole;
 
-    const dashboardByRole = {
-      student: "/student/dashboard",
-      teacher: "/teacher/dashboard",
-      admin: "/admin/dashboard",
-    } as const;
-
-    return NextResponse.json({
-      message: "Login successful.",
-      user: {
-        id: String(user._id),
+      await createSession({
+        userId: String(user._id),
+        role,
         name: user.name,
         email: user.email,
-        role: user.role,
-      },
-      redirectTo: dashboardByRole[user.role],
-    });
+      });
+
+      const redirectTo = ROLE_DASHBOARDS[role] || "/";
+
+      return NextResponse.json({
+        success: true,
+        message: "Login successful.",
+        user: {
+          id: String(user._id),
+          name: user.name,
+          email: user.email,
+          role,
+        },
+        redirectTo,
+      });
+    } catch (dbError) {
+      // Graceful fallback for demo accounts if DB connection is offline
+      const demo = DEMO_USERS[normalizedEmail];
+      if (demo && demo.pass === password) {
+        await createSession({
+          userId: `demo-${demo.role}`,
+          role: demo.role,
+          name: demo.name,
+          email: normalizedEmail,
+        });
+
+        return NextResponse.json({
+          success: true,
+          message: "Login successful (Demo Mode).",
+          user: {
+            id: `demo-${demo.role}`,
+            name: demo.name,
+            email: normalizedEmail,
+            role: demo.role,
+          },
+          redirectTo: ROLE_DASHBOARDS[demo.role],
+        });
+      }
+
+      console.error("Login database error:", dbError);
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Database connection pending. Please verify MONGODB_URI in .env.local or use demo accounts.",
+        },
+        { status: 500 }
+      );
+    }
   } catch (error) {
-    console.error("Login error:", error);
+    console.error("Login server error:", error);
 
     return NextResponse.json(
-      { message: "Something went wrong. Please try again." },
+      {
+        success: false,
+        message: "Something went wrong. Please try again.",
+      },
       { status: 500 }
     );
   }

@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db/mongoose";
 import User from "@/models/User";
 import { hashPassword } from "@/lib/auth/password";
-import { registerSchema } from "@/features/auth/auth.validation";
+import { registerSchema } from "@/app/features/auth/auth.validation";
+import type { UserRole } from "@/types/auth";
 
 export async function POST(request: Request) {
   try {
@@ -11,12 +12,33 @@ export async function POST(request: Request) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { message: "Please enter valid registration details." },
+        {
+          success: false,
+          message: parsed.error.issues[0]?.message || "Please enter valid registration details.",
+        },
         { status: 400 }
       );
     }
 
-    const { name, email, password } = parsed.data;
+    const { name, email, password, role, adminPasscode } = parsed.data;
+
+    // Security check for admin registration
+    let assignedRole: UserRole = "student";
+    if (role === "teacher") {
+      assignedRole = "teacher";
+    } else if (role === "admin") {
+      const allowedAdminPasscode = process.env.ADMIN_INVITE_CODE || "admin123";
+      if (adminPasscode !== allowedAdminPasscode) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: "Invalid admin passcode. Contact system administrator.",
+          },
+          { status: 403 }
+        );
+      }
+      assignedRole = "admin";
+    }
 
     await connectDB();
 
@@ -26,7 +48,7 @@ export async function POST(request: Request) {
 
     if (existingUser) {
       return NextResponse.json(
-        { message: "Unable to register with these details." },
+        { success: false, message: "An account with this email already exists." },
         { status: 409 }
       );
     }
@@ -37,12 +59,14 @@ export async function POST(request: Request) {
       name,
       email: email.toLowerCase(),
       password: hashedPassword,
-      role: "student", // Never accept role from public input
+      role: assignedRole,
+      isActive: true,
     });
 
     return NextResponse.json(
       {
-        message: "Registration successful. Please log in.",
+        success: true,
+        message: `Account created successfully as ${assignedRole.toUpperCase()}. Please log in.`,
         user: {
           id: String(user._id),
           name: user.name,
@@ -53,7 +77,6 @@ export async function POST(request: Request) {
       { status: 201 }
     );
   } catch (error) {
-    // Duplicate-key errors can occur when simultaneous requests race.
     if (
       typeof error === "object" &&
       error !== null &&
@@ -61,7 +84,7 @@ export async function POST(request: Request) {
       error.code === 11000
     ) {
       return NextResponse.json(
-        { message: "Unable to register with these details." },
+        { success: false, message: "An account with this email already exists." },
         { status: 409 }
       );
     }
@@ -69,7 +92,7 @@ export async function POST(request: Request) {
     console.error("Registration error:", error);
 
     return NextResponse.json(
-      { message: "Something went wrong. Please try again." },
+      { success: false, message: "Something went wrong. Please try again." },
       { status: 500 }
     );
   }

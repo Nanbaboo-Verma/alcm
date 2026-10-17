@@ -1,10 +1,16 @@
-const nextConfig = {
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
   images: {
-    domains: ["your-image-domain.com"], // Add allowed image domains
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+    ],
   },
-  compress: true, // Enable gzip compression
+  compress: true,
 };
 
-module.exports = nextConfig;
+export default nextConfig;

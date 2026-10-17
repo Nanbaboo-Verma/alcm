@@ -1,16 +1,32 @@
 import { NextRequest, NextResponse } from "next/server";
-import connectDB from "@/lib/mongodb";
-import Contact from "@/models/contact";
+import { connectDB } from "@/lib/db/mongoose";
+import Contact from "@/models/Contact";
+
+export async function GET() {
+  try {
+    await connectDB();
+    const contacts = await Contact.find().sort({ createdAt: -1 }).lean();
+
+    return NextResponse.json(
+      { success: true, contacts },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error fetching contacts:", error);
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json(
+      { success: false, message: errorMessage },
+      { status: 500 }
+    );
+  }
+}
 
 export async function POST(req: NextRequest) {
   try {
     await connectDB();
-    console.log("Database connected successfully");
 
     const body = await req.json();
-    console.log("Request body:", body);
 
-    // Validate required fields
     if (!body.firstName || !body.lastName || !body.phoneNumber || !body.message) {
       return NextResponse.json(
         { success: false, message: "All fields are required" },
@@ -19,13 +35,11 @@ export async function POST(req: NextRequest) {
     }
 
     const contact = await Contact.create({
-      firstName: body.firstName,
-      lastName: body.lastName,
-      phoneNumber: body.phoneNumber,
-      message: body.message,
+      firstName: body.firstName.trim(),
+      lastName: body.lastName.trim(),
+      phoneNumber: body.phoneNumber.trim(),
+      message: body.message.trim(),
     });
-
-    console.log("Contact saved:", contact);
 
     return NextResponse.json(
       { success: true, message: "Contact form submitted successfully", contact },

@@ -22,7 +22,7 @@ export default function ContactInfoPage() {
     const fetchContacts = async () => {
       try {
         setLoading(true);
-        const response = await fetch("/api/contact-us/get");
+        const response = await fetch("/api/contact-us");
         const data = await response.json();
 
         if (!response.ok) {

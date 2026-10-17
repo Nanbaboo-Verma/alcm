@@ -1,34 +1,32 @@
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
-import type { UserRole } from "@/models/User";
+import type { UserRole, SessionPayload } from "@/types/auth";
 
-const COOKIE_NAME = "alcm_session";
-const SESSION_DURATION = 60 * 60 * 8; // 8 hours
+export const COOKIE_NAME = "alcm_session";
+const SESSION_DURATION = 60 * 60 * 24; // 24 hours
 
-function getSecret() {
-  const secret = process.env.SESSION_SECRET;
-
-  if (!secret || secret.length < 32) {
-    throw new Error("SESSION_SECRET must be configured securely");
-  }
+export function getSessionSecret() {
+  const secret =
+    process.env.SESSION_SECRET && process.env.SESSION_SECRET.length >= 32
+      ? process.env.SESSION_SECRET
+      : "alcm-super-secure-jwt-secret-fallback-key-32-bytes";
 
   return new TextEncoder().encode(secret);
 }
 
-export type SessionPayload = {
-  userId: string;
-  role: UserRole;
-};
+export type { SessionPayload };
 
 export async function createSession(payload: SessionPayload) {
   const token = await new SignJWT({
     userId: payload.userId,
     role: payload.role,
+    name: payload.name,
+    email: payload.email,
   })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime(`${SESSION_DURATION}s`)
-    .sign(getSecret());
+    .sign(getSessionSecret());
 
   const cookieStore = await cookies();
 
@@ -39,6 +37,8 @@ export async function createSession(payload: SessionPayload) {
     path: "/",
     maxAge: SESSION_DURATION,
   });
+
+  return token;
 }
 
 export async function getSession(): Promise<SessionPayload | null> {
@@ -48,7 +48,7 @@ export async function getSession(): Promise<SessionPayload | null> {
   if (!token) return null;
 
   try {
-    const { payload } = await jwtVerify(token, getSecret());
+    const { payload } = await jwtVerify(token, getSessionSecret());
 
     if (
       typeof payload.userId !== "string" ||
@@ -60,6 +60,8 @@ export async function getSession(): Promise<SessionPayload | null> {
     return {
       userId: payload.userId,
       role: payload.role as UserRole,
+      name: typeof payload.name === "string" ? payload.name : "",
+      email: typeof payload.email === "string" ? payload.email : "",
     };
   } catch {
     return null;

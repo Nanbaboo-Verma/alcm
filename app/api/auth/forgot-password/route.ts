@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import { randomBytes, createHash } from "node:crypto";
 import { connectDB } from "@/lib/db/mongoose";
 import User from "@/models/User";
+import { forgotPasswordSchema } from "@/app/features/auth/auth.validation";
 import { sendPasswordResetEmail } from "@/lib/email/send-email";
-import { forgotPasswordSchema } from "@/features/auth/auth.validation";
 
 export async function POST(request: Request) {
   const genericMessage =

@@ -4,8 +4,6 @@ import Student from "./(pages)/home/student/student";
 import Mater from "./(pages)/home/mater/page";
 import TrustedStudentsTestimonials from "./_components/TrustedStudents";
 import TrendingCourses from "./_components/TrendingCourses";
-import NewHeader from "./_components/NewHeader";
-import ToperStudents from "./(pages)/home/ToperStudents/page";
 
 export default function Home() {
   return (
