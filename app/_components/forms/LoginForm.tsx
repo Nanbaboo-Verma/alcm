@@ -72,7 +72,9 @@ export default function LoginForm() {
       <div className="p-4 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100">
         <p className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2.5 flex items-center justify-between">
           <span>⚡ Instant Demo Logins</span>
-          <span className="text-[10px] text-blue-600 font-normal">Click to autofill</span>
+          <span className="text-[10px] text-blue-600 font-normal">
+            Click to autofill
+          </span>
         </p>
         <div className="grid grid-cols-3 gap-2">
           <button
@@ -107,7 +109,10 @@ export default function LoginForm() {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="email" className="mb-1 block text-sm font-medium text-slate-700">
+          <label
+            htmlFor="email"
+            className="mb-1 block text-sm font-medium text-slate-700"
+          >
             Email address
           </label>
           <input
@@ -125,7 +130,10 @@ export default function LoginForm() {
         </div>
 
         <div>
-          <label htmlFor="password" className="mb-1 block text-sm font-medium text-slate-700">
+          <label
+            htmlFor="password"
+            className="mb-1 block text-sm font-medium text-slate-700"
+          >
             Password
           </label>
           <input
@@ -153,7 +161,10 @@ export default function LoginForm() {
         </div>
 
         {error && (
-          <div role="alert" className="p-3 text-xs bg-red-50 text-red-700 border border-red-200 rounded-lg">
+          <div
+            role="alert"
+            className="p-3 text-xs bg-red-50 text-red-700 border border-red-200 rounded-lg"
+          >
             ✕ {error}
           </div>
         )}
@@ -168,7 +179,10 @@ export default function LoginForm() {
 
         <p className="text-center text-xs text-slate-600 pt-2">
           Need an account?{" "}
-          <Link href="/signup" className="text-blue-600 hover:underline font-semibold">
+          <Link
+            href="/signup"
+            className="text-blue-600 hover:underline font-semibold"
+          >
             Create an account
           </Link>
         </p>
