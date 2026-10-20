@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Header from "./_components/Header";
+import Sidebar from "./_components/Sidebar";
+import NavProvider from "./_components/NavProvider";
+import Footer from "./_components/Footer";
+import { AuthProvider } from "./features/auth/AuthContext";
 import "./globals.css";
-import Header from "./components/Header";
-import Sidebar from "./components/Sidebar";
-import NavProvider from "./components/NavProvider";
-import Footer from "./components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,21 +27,27 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet"></link>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
+          rel="stylesheet"
+        ></link>
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <NavProvider>
-          <main>
-            <Header />
-            <Sidebar />
-            <div>{children}</div>
-            <Footer />
-          </main>
-        </NavProvider>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <AuthProvider>
+          <NavProvider>
+            <main>
+              <Header />
+              <Sidebar />
+              <div>{children}</div>
+              <Footer />
+            </main>
+          </NavProvider>
+        </AuthProvider>
       </body>
     </html>
   );

@@ -1,11 +1,9 @@
-import Banner from "./home/banner/page";
-import LookingFor from "./home/LookingFor/page";
-import Student from "./home/student/student";
-import Mater from "./home/mater/page";
-import TrustedStudentsTestimonials from "./components/TrustedStudents";
-import TrendingCourses from "./components/TrendingCourses";
-import NewHeader from "./components/NewHeader";
-import ToperStudents from "./home/ToperStudents/page";
+import Banner from "./(pages)/home/banner/page";
+import LookingFor from "./(pages)/home/LookingFor/page";
+import Student from "./(pages)/home/student/student";
+import Mater from "./(pages)/home/mater/page";
+import TrustedStudentsTestimonials from "./_components/TrustedStudents";
+import TrendingCourses from "./_components/TrendingCourses";
 
 export default function Home() {
   return (
